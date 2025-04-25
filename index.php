@@ -102,6 +102,14 @@ if ($endpoint === 'users') {
                 echo json_encode(['message' => 'Missing or invalid question ID for update']);
             }
             break;
+        case 'DELETE':
+            if (isset($id) && is_numeric($id)) {
+                $questionController->deleteQuestion($id);
+            } else {
+                http_response_code(400);
+                echo json_encode(['message' => 'Missing or invalid question ID for delete']);
+            }
+            break;
         default:
             http_response_code(405);
             echo json_encode(['message' => 'Method ' . $request_method . ' not allowed for this endpoint']);

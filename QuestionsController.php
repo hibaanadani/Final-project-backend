@@ -109,5 +109,23 @@ class QuestionsController {
             echo json_encode(['message' => 'Failed to update question']);
         }
     }
+    public function deleteQuestion($question_id) {
+        $query = "DELETE FROM questions WHERE question_id = :question_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':question_id', $question_id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                http_response_code(200); // OK
+                echo json_encode(['message' => 'Question deleted successfully', 'question_id' => $question_id]);
+            } else {
+                http_response_code(404); // Not Found
+                echo json_encode(['message' => 'Question not found']);
+            }
+        } else {
+            http_response_code(500); // Internal Server Error
+            echo json_encode(['message' => 'Failed to delete question']);
+        }
+    }
 }
 ?>
