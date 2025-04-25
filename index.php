@@ -45,7 +45,6 @@ if ($endpoint === 'users') {
 } elseif ($endpoint === 'quizzes') {
     switch ($request_method) {
         case 'GET':
-            // Handle getting all or a single quiz (we'll add single later)
             if (isset($id) && is_numeric($id)) {
                 // $quizController->getQuiz($id); // Implement this later
             } else {
@@ -53,15 +52,22 @@ if ($endpoint === 'users') {
             }
             break;
         case 'POST':
-            error_log("Action value: " . $action); 
             $quizController->createQuiz();
             break;
         case 'PUT': // Or case 'PATCH':
-            if ($action && is_numeric($action)) {
-                $quizController->updateQuiz($action);
+            if (isset($id) && is_numeric($id)) {
+                $quizController->updateQuiz($id);
             } else {
                 http_response_code(400); // Bad Request
                 echo json_encode(['message' => 'Missing or invalid quiz ID for update']);
+            }
+            break;
+         case 'DELETE':
+            if ($action && is_numeric($action)) {
+                $quizController->deleteQuiz($action);
+            } else {
+                http_response_code(400); // Bad Request
+                echo json_encode(['message' => 'Missing or invalid quiz ID for delete']);
             }
             break;
         default:

@@ -74,5 +74,23 @@ class QuizzesController {
             echo json_encode(['message' => 'Failed to update quiz']);
         }
     }
+    public function deleteQuiz($id) {
+        $query = "DELETE FROM quizzes WHERE quiz_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                http_response_code(200); // OK
+                echo json_encode(['message' => 'Quiz deleted successfully', 'quiz_id' => $id]);
+            } else {
+                http_response_code(404); // Not Found
+                echo json_encode(['message' => 'Quiz not found']);
+            }
+        } else {
+            http_response_code(500); // Internal Server Error
+            echo json_encode(['message' => 'Failed to delete quiz']);
+        }
+    }
 }
 ?>
