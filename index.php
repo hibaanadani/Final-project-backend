@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 require_once 'connection.php';
 require_once 'UsersController.php';
 require_once 'QuizzesController.php';
+require_once 'QuestionsController.php'; // Make sure this line exists
 
 $request_uri = $_SERVER['REQUEST_URI'];
 $request_method = $_SERVER['REQUEST_METHOD'];
@@ -17,7 +18,8 @@ $action = $segments[2] ?? '';
 $id = $segments[3] ?? '';
 
 $userController = new UsersController($conn);
-$quizController = new QuizzesController($conn); // Instantiate the QuizzesController
+$quizController = new QuizzesController($conn);
+$questionController = new QuestionsController($conn);  // Instantiate the QuizzesController
 
 if ($endpoint === 'users') {
     switch ($action) {
@@ -76,8 +78,23 @@ if ($endpoint === 'users') {
             break;
     }
 } elseif ($endpoint === 'questions') {
-    // ... handle questions later
-} else {
+    switch ($request_method) {
+        case 'POST':
+            // Expecting the quiz_id as the next segment after /questions/
+            if (isset($action) && is_numeric($action)) {
+                $questionController->createQuestion($action);
+            } else {
+                http_response_code(400); // Bad Request
+                echo json_encode(['message' => 'Missing or invalid quiz ID for creating question']);
+            }
+            break;
+        // We'll add GET, PUT, DELETE later
+        default:
+            http_response_code(405);
+            echo json_encode(['message' => 'Method ' . $request_method . ' not allowed for this endpoint']);
+            break;
+    }
+}else {
     http_response_code(404);
     echo json_encode(['message' => 'Endpoint Not Found']);
 }
