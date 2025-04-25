@@ -30,5 +30,20 @@ class QuizzesController {
             echo json_encode(['message' => 'Failed to create quiz']);
         }
     }
+    public function getAllQuizzes() {
+        $query = "SELECT quiz_id, name FROM quizzes";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        $quizzes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($quizzes) {
+            http_response_code(200); // OK
+            echo json_encode($quizzes);
+        } else {
+            http_response_code(200); // OK (no quizzes found is still a successful request)
+            echo json_encode([]); // Return an empty array if no quizzes exist
+        }
+    }
 }
 ?>

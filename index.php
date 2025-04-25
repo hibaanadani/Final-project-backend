@@ -44,6 +44,9 @@ if ($endpoint === 'users') {
     }
 } elseif ($endpoint === 'quizzes') {
     switch ($request_method) {
+        case 'GET':
+            $quizController->getAllQuizzes(); // Call the new method
+            break;
         case 'POST':
             $quizController->createQuiz();
             break;
