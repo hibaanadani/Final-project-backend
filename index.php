@@ -3,8 +3,8 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 require_once 'connection.php';
-require_once 'UsersControl.php';
-require_once 'QuizzesControl.php';
+require_once 'UsersController.php';
+require_once 'QuizzesController.php';
 
 $request_uri = $_SERVER['REQUEST_URI'];
 $request_method = $_SERVER['REQUEST_METHOD'];

@@ -11,7 +11,7 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully"; // For testing the connection
+    //echo "Connected successfully"; // keep it commented so it doesnt conflict with json. For testing the connection
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }

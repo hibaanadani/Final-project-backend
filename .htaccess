@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /quiz_api/
+
+    RewriteCond %{REQUEST_URI} ^/quiz_api/users/register$
+    RewriteRule ^(.*)$ index.php [L]
+
+    RewriteCond %{REQUEST_URI} ^/quiz_api/users/login$
+    RewriteRule ^(.*)$ index.php [L]
+
+    RewriteCond %{REQUEST_URI} ^/quiz_api/quizzes$
+    RewriteRule ^(.*)$ index.php [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
