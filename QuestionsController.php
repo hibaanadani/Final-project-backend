@@ -47,5 +47,21 @@ class QuestionsController {
             echo json_encode(['message' => 'Failed to create question']);
         }
     }
+    public function getQuestionsByQuiz($quiz_id) {
+        $query = "SELECT question_id, question_text, options, correct_answer FROM questions WHERE quiz_id = :quiz_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':quiz_id', $quiz_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($questions) {
+            http_response_code(200); // OK
+            echo json_encode($questions);
+        } else {
+            http_response_code(200); // OK (no questions found is still a successful request)
+            echo json_encode([]); // Return an empty array if no questions exist for this quiz
+        }
+    }
 }
 ?>
