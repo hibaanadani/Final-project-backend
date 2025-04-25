@@ -94,12 +94,20 @@ if ($endpoint === 'users') {
                 echo json_encode(['message' => 'Missing or invalid quiz ID for creating question']);
             }
             break;
+        case 'PUT': // Or case 'PATCH':
+            if (isset($id) && is_numeric($id)) {
+                $questionController->updateQuestion($id);
+            } else {
+                http_response_code(400);
+                echo json_encode(['message' => 'Missing or invalid question ID for update']);
+            }
+            break;
         default:
             http_response_code(405);
             echo json_encode(['message' => 'Method ' . $request_method . ' not allowed for this endpoint']);
             break;
     }
-} else {
+}else {
     http_response_code(404);
     echo json_encode(['message' => 'Endpoint Not Found']);
 }
