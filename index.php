@@ -45,10 +45,24 @@ if ($endpoint === 'users') {
 } elseif ($endpoint === 'quizzes') {
     switch ($request_method) {
         case 'GET':
-            $quizController->getAllQuizzes(); // Call the new method
+            // Handle getting all or a single quiz (we'll add single later)
+            if (isset($id) && is_numeric($id)) {
+                // $quizController->getQuiz($id); // Implement this later
+            } else {
+                $quizController->getAllQuizzes();
+            }
             break;
         case 'POST':
+            error_log("Action value: " . $action); 
             $quizController->createQuiz();
+            break;
+        case 'PUT': // Or case 'PATCH':
+            if ($action && is_numeric($action)) {
+                $quizController->updateQuiz($action);
+            } else {
+                http_response_code(400); // Bad Request
+                echo json_encode(['message' => 'Missing or invalid quiz ID for update']);
+            }
             break;
         default:
             http_response_code(405);

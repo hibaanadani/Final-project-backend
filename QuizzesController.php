@@ -45,5 +45,34 @@ class QuizzesController {
             echo json_encode([]); // Return an empty array if no quizzes exist
         }
     }
+    public function updateQuiz($id) {
+        $data = json_decode(file_get_contents("php://input"));
+    
+        if (!isset($data->name) || empty(trim($data->name))) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Please provide a name for the quiz']);
+            return;
+        }
+    
+        $name = trim($data->name);
+    
+        $query = "UPDATE quizzes SET name = :name WHERE quiz_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                http_response_code(200);
+                echo json_encode(['message' => 'Quiz updated successfully', 'quiz_id' => $id]);
+            } else {
+                http_response_code(404);
+                echo json_encode(['message' => 'Quiz not found']);
+            }
+        } else {
+            http_response_code(500);
+            echo json_encode(['message' => 'Failed to update quiz']);
+        }
+    }
 }
 ?>
